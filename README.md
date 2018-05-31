@@ -15,7 +15,7 @@ Language Support Matrix
 | Language / Platform | Server | Client  |
 |-----------|----------------------------|----------------------------|
 | **Scala / JVM**          | **Yes** [(example)](./servers/scala-jvm-server) | **Yes** |
-| **TypeScript / node.js** | TBD     | **Yes** [(example)](./clients/typescript-node-client) |
+| **TypeScript / Node.js** | TBD     | **Yes** [(example)](./clients/typescript-node-client) |
 | **Go / Native**          | **Yes** | TBD |
 | **C# / CLR**             | **Yes** | TBD |
 
