@@ -8,7 +8,7 @@ You can use this sample as a starting template for your project!
 IdeaLingua
 ----------
 
-[IdeaLingua](https://github.com/pshirshov/izumi-r2) is an RPC framework that lets you effortlessly wire together distributed applications with components that may be written in any supported language!<br/>
+[IdeaLingua](https://github.com/pshirshov/izumi-r2) is an RPC framework that lets you effortlessly wire together distributed applications with components written in any language!<br/>
 You can find out more at [our website](https://github.com/pshirshov/izumi-r2)!
 
 Language Support Matrix
