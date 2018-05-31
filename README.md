@@ -8,14 +8,13 @@ You can use this sample as a starting template for your project!
 IdeaLingua
 ----------
 
-**IdeaLingua** – is an interface definition language and RPC system.
-
-IdeaLingua lets you wire together distributed systems written in any support language!
-
-At the moment we support the following languages:
+[IdeaLingua](https://github.com/pshirshov/izumi-r2) is an RPC framework that lets you effortlessly wire together distributed applications with components that may be written in any supported language!<br/>
+You can find out more at [our website](https://github.com/pshirshov/izumi-r2)!
 
 Language Support Matrix
 -----------------------
+
+At the moment we support following languages:
 
 | Language / Platform | Server | Client  |
 |-----------|----------------------------|----------------------------|
@@ -26,4 +25,4 @@ Language Support Matrix
 
 Some of them already have sample Pet Store implementations. Others are still coming!
 
-If you want your language to be supported, just submit a Pull Request to https://github.com/pshirshov/izumi-r2
+If you want your language to be supported, just submit a Pull Request to our [github repository](https://github.com/pshirshov/izumi-r2)!
