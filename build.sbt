@@ -1,15 +1,19 @@
 import com.arpnetworking.sbt.typescript.Import.TypescriptKeys
 import com.github.pshirshov.izumi.idealingua.translator.IDLLanguage
 import com.github.pshirshov.izumi.idealingua.translator.TypespaceCompiler.CompilerOptions
-import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.Keys.{idlDefaultExtensionsGolang, idlDefaultExtensionsScala, idlDefaultExtensionsTypescript}
-import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.{Invokation, Mode}
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.Keys.{compilationTargets, idlDefaultExtensionsGolang, idlDefaultExtensionsScala, idlDefaultExtensionsTypescript}
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.{Invokation, Mode, Scope, compileSources}
 import com.github.pshirshov.izumi.sbt.deps.IzumiDeps.{R, V}
 import com.github.pshirshov.izumi.sbt.plugins.IzumiConvenienceTasksPlugin.Keys.defaultStubPackage
 import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys.EngineType
+import sbt.Keys.sourceDirectories
+import sbt.io.{Path, PathFinder}
 
 enablePlugins(IzumiGitEnvironmentPlugin)
 
 name := "izumi-petstore"
+
+resolvers += Opts.resolver.sonatypeReleases
 
 defaultStubPackage in Global := Some("petstore")
 fork in Global := false
@@ -44,9 +48,9 @@ val ApiSettings: SettingsGroup = new SettingsGroup {
 
   override val settings = Seq(
     IdealinguaPlugin.Keys.compilationTargets := Seq(
-//      Invokation(CompilerOptions(IDLLanguage.Scala, idlDefaultExtensionsScala.value), Mode.Sources)
-//      ,
-      Invokation(CompilerOptions(IDLLanguage.Typescript, idlDefaultExtensionsTypescript.value), Mode.Sources)
+      Invokation(CompilerOptions(IDLLanguage.Scala, idlDefaultExtensionsScala.value), Mode.Sources)
+
+      , Invokation(CompilerOptions(IDLLanguage.Typescript, idlDefaultExtensionsTypescript.value), Mode.Sources)
     )
   )
 }
@@ -56,7 +60,17 @@ val TypeScriptSettings: SettingsGroup = new SettingsGroup {
 
   override val settings = Seq(
     JsEngineKeys.engineType := EngineType.Node
-    , TypescriptKeys.configFile := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+    , sourceDirectory in TypescriptKeys.typescript := baseDirectory.value / "src" / "main" / "typescript"
+    , sourceDirectories in TypescriptKeys.typescript := Seq((sourceDirectory in TypescriptKeys.typescript).value)
+
+    , sourceGenerators in Compile += task {
+      // i'm very sorry, but its the fault of ts's retarded `commonRoot` logic, not mine!
+      val tsGeneratedSources = ((resourceManaged in petstoreApi).value / "main" / "typescript").asFile.getAbsoluteFile
+      val tsSources = ((sourceDirectory in TypescriptKeys.typescript).value / "generated").asFile.getAbsoluteFile
+
+      val sources = PathFinder(tsGeneratedSources).allPaths pair Path.rebase(tsGeneratedSources, tsSources)
+      Seq()
+    }
   )
 }
 
@@ -83,6 +97,13 @@ lazy val scalaJvmServer = inServers.as.module
 lazy val typescriptNodeClient = inClients.as.module
   .dependsOn(petstoreApi)
   .settings(TypeScriptSettings)
+  .settings(
+    TypescriptKeys.configFile in ThisProject := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+    , TypescriptKeys.configFile in ThisBuild := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+    , TypescriptKeys.configFile in Global := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+    , TypescriptKeys.configFile in Compile := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+    , TypescriptKeys.configFile in TypescriptKeys.typescript := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+  )
 
 lazy val allProjects: Seq[ProjectReference] = Seq(
   petstoreApi

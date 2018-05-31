@@ -1,4 +1,5 @@
 .idea
+generated
 /local.sbt
 .secrets
 flow.txt

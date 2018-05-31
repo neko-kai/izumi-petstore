@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "../../../target/tsc_output",
+    "outDir": "../../../target/tsOutput/",
     "module": "commonjs",
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
     "allowJs": false,
     "moduleResolution": "node",
+    "listEmittedFiles": true,
     "rootDirs": [
-      ".",
-      "../../../../../api/petstore-api/target/scala-2.12/src_managed/main/"
+      "."
     ],
     "baseUrl": ".",
     "forceConsistentCasingInFileNames": true,

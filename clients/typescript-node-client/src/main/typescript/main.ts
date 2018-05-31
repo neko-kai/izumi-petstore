@@ -1,6 +1,9 @@
+import { HelloWorld } from 'generated/petstore/api'
 
 function main() {
-    console.log("Hello World!");
+    const hello = new HelloWorld({'hello': 'Hello'});
+
+    console.log(hello.toString());
 }
 
 main();
