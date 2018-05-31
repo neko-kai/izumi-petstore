@@ -14,9 +14,9 @@ Language Support Matrix
 
 | Server Language / Platform | Client Language / Platform |
 |----------------------------|----------------------------|
-| Scala / JVM [(petstore)](./servers/scala-jvm-server) | Scala / JVM |
-|                            | TypeScript / node.js [(petstore)](./clients/typescript-node-client) |
+| Scala / JVM [(example)](./servers/scala-jvm-server) | Scala / JVM |
+|                            | TypeScript / node.js [(example)](./clients/typescript-node-client) |
 | Go / Native                | Scala                      |
 | C# / CLR                   |                            |
 
-Some of them already have petstore implementations you can find in this repo!
+Some of them already have sample Pet Store implementations. Others are still coming!
