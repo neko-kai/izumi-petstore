@@ -37,11 +37,15 @@ val ApiSettings: SettingsGroup = new SettingsGroup {
   override val plugins = Set(IdealinguaPlugin) // enable Izumi-IDL compiler
 }
 
+val TypeScriptSettings: SettingsGroup = new SettingsGroup {}
+
 lazy val inRoot = In(".")
   .settings(GlobalSettings)
 
-lazy val inBackend = In("backend")
+lazy val inServers = In("servers")
   .settings(GlobalSettings)
+
+lazy val inClients = In("clients")
 
 lazy val inApi = In("api")
   .settings(GlobalSettings)
@@ -51,7 +55,7 @@ lazy val inApi = In("api")
 lazy val petstoreApi = inApi.as.module
 
 // Servers
-lazy val scalaJvmServer = inBackend.as.module
+lazy val scalaJvmServer = inServers.as.module
   .dependsOn(petstoreApi)
 
 // Clients
