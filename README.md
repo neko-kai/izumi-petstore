@@ -20,8 +20,8 @@ At the moment we support following languages:
 |-----------|----------------------------|----------------------------|
 | **Scala / JVM**          | **Yes** [(example)](./servers/scala-jvm-server) | **Yes** |
 | **TypeScript / Node.js** | TBD     | **Yes** [(example)](./clients/typescript-node-client) |
-| **Go / Native**          | **Yes** | TBD |
-| **C# / CLR**             | **Yes** | TBD |
+| **Go / Native**          | **Yes** | **Yes** |
+| **C# / CLR**             | TBD | TBD |
 
 Some of them already have sample Pet Store implementations. Others are still coming!
 
