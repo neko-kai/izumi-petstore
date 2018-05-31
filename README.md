@@ -5,9 +5,14 @@ A sample Pet Store application with Scala back-end and TypeScript front-end, wir
 
 You can use this sample as a starting template for your project!
 
-IdeaLingua is an interface definition language and RPC system that lets you effortlessly wire together remote APIs written in any language!
+IdeaLingua
+----------
 
-Currently, IdeaLingua supports the following languages:
+**IdeaLingua** – is an interface definition language and RPC system.
+
+IdeaLingua lets you wire together distributed systems written in any support language!
+
+At the moment we support the following languages:
 
 Language Support Matrix
 -----------------------
@@ -20,3 +25,5 @@ Language Support Matrix
 | **C# / CLR**             | **Yes** | TBD |
 
 Some of them already have sample Pet Store implementations. Others are still coming!
+
+If you want your language to be supported, just submit a Pull Request to https://github.com/pshirshov/izumi-r2
