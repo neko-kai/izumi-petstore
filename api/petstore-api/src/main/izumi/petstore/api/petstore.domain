@@ -1,0 +1,6 @@
+package petstore.api
+
+data HelloWorld {
+  hello: str
+}
+
