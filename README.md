@@ -12,11 +12,11 @@ Currently, IdeaLingua supports the following languages:
 Language Support Matrix
 -----------------------
 
-| Server Language / Platform | Client Language / Platform |
-|----------------------------|----------------------------|
-| Scala / JVM [(example)](./servers/scala-jvm-server) | Scala / JVM |
-|                            | TypeScript / node.js [(example)](./clients/typescript-node-client) |
-| Go / Native                | Scala                      |
-| C# / CLR                   |                            |
+| Language / Platform | Server | Client  |
+|-----------|----------------------------|----------------------------|
+| **Scala / JVM**          | **Yes** [(example)](./servers/scala-jvm-server) | **Yes** |
+| **TypeScript / node.js** | TBD     | **Yes** [(example)](./clients/typescript-node-client) |
+| **Go / Native**          | **Yes** | TBD |
+| **C# / CLR**             | **Yes** | TBD |
 
 Some of them already have sample Pet Store implementations. Others are still coming!
