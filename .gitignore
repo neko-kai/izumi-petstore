@@ -1,6 +1,7 @@
 .idea
 /local.sbt
 .secrets
+flow.txt
 
 secrets.tar
 build/project

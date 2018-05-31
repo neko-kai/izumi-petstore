@@ -1,5 +1,11 @@
+import com.arpnetworking.sbt.typescript.Import.TypescriptKeys
+import com.github.pshirshov.izumi.idealingua.translator.IDLLanguage
+import com.github.pshirshov.izumi.idealingua.translator.TypespaceCompiler.CompilerOptions
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.Keys.{idlDefaultExtensionsGolang, idlDefaultExtensionsScala, idlDefaultExtensionsTypescript}
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.{Invokation, Mode}
 import com.github.pshirshov.izumi.sbt.deps.IzumiDeps.{R, V}
 import com.github.pshirshov.izumi.sbt.plugins.IzumiConvenienceTasksPlugin.Keys.defaultStubPackage
+import com.typesafe.sbt.jse.JsEngineImport.JsEngineKeys.EngineType
 
 enablePlugins(IzumiGitEnvironmentPlugin)
 
@@ -35,9 +41,24 @@ val GlobalSettings: DefaultGlobalSettingsGroup = new DefaultGlobalSettingsGroup 
 
 val ApiSettings: SettingsGroup = new SettingsGroup {
   override val plugins = Set(IdealinguaPlugin) // enable Izumi-IDL compiler
+
+  override val settings = Seq(
+    IdealinguaPlugin.Keys.compilationTargets := Seq(
+//      Invokation(CompilerOptions(IDLLanguage.Scala, idlDefaultExtensionsScala.value), Mode.Sources)
+//      ,
+      Invokation(CompilerOptions(IDLLanguage.Typescript, idlDefaultExtensionsTypescript.value), Mode.Sources)
+    )
+  )
 }
 
-val TypeScriptSettings: SettingsGroup = new SettingsGroup {}
+val TypeScriptSettings: SettingsGroup = new SettingsGroup {
+  override val plugins = Set(SbtWeb, SbtTypescript)
+
+  override val settings = Seq(
+    JsEngineKeys.engineType := EngineType.Node
+    , TypescriptKeys.configFile := "clients/typescript-node-client/src/main/typescript/tsconfig.json"
+  )
+}
 
 lazy val inRoot = In(".")
   .settings(GlobalSettings)
@@ -59,8 +80,14 @@ lazy val scalaJvmServer = inServers.as.module
   .dependsOn(petstoreApi)
 
 // Clients
+lazy val typescriptNodeClient = inClients.as.module
+  .dependsOn(petstoreApi)
+  .settings(TypeScriptSettings)
 
-
-lazy val allProjects: Seq[ProjectReference] = Seq(scalaJvmServer)
+lazy val allProjects: Seq[ProjectReference] = Seq(
+  petstoreApi
+  , scalaJvmServer
+  , typescriptNodeClient
+)
 
 lazy val `izumi-petstore` = inRoot.as.root.transitiveAggregateSeq(allProjects)
