@@ -63,7 +63,7 @@ val TypeScriptSettings: SettingsGroup = new SettingsGroup {
     sourceDirectory in Compile := baseDirectory.value / "src" / "main" / "typescript"
     , sourceDirectories in Compile := Seq((sourceDirectory in Compile).value)
 
-    , sourceGenerators in Compile += task {
+    , compile in Compile := Def.task {
       // i'm very sorry, but its the fault of ts's retarded `commonRoot` logic, not mine!
       val tsGeneratedSources = ((resourceManaged in petstoreApi).value / "main" / "typescript").asFile.getAbsoluteFile
       val tsSourceRoot = (sourceDirectory in Compile).value
@@ -71,13 +71,6 @@ val TypeScriptSettings: SettingsGroup = new SettingsGroup {
 
       IO.copyDirectory(tsGeneratedSources, tsSources, overwrite = true)
 
-      Seq()
-    }
-
-    , compile in Compile := Def.task {
-      val _ = (sourceGenerators in Compile).value
-
-      val tsSourceRoot = (sourceDirectory in Compile).value
       // sbt-typescript doesn't actually work at all
       val res = sys.process.stringSeqToProcess(Seq("tsc", "-p", tsSourceRoot.getAbsolutePath)).!
       if (res != 0)

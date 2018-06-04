@@ -10,7 +10,7 @@ resolvers += Resolver.typesafeRepo("releases")
 val coursier = "1.1.0-M3"
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % coursier)
 
-val izumi_version = "0.6.3-SNAPSHOT"
+val izumi_version = "0.5.13"
 addSbtPlugin("com.github.pshirshov.izumi.r2" % "sbt-idealingua" % izumi_version)
 addSbtPlugin("com.github.pshirshov.izumi.r2" % "sbt-izumi" % izumi_version)
 addSbtPlugin("com.github.pshirshov.izumi.r2" % "sbt-izumi-deps" % izumi_version)
