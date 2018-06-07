@@ -15,3 +15,4 @@ class ScalaClient {
   private val clientDispatcher = rt.httpClient(Http1Client[IO]().unsafeRunSync, marsh)(rt.requestBuilder(uri))
   final val helloworldClient = HelloServiceWrapped.clientUnsafe(clientDispatcher)
 }
+
