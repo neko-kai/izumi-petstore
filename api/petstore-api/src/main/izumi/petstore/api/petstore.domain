@@ -12,3 +12,6 @@ data PetMap {
   map: map[PetId, HelloWorld]
 }
 
+service HelloService {
+  def hello(): HelloWorld
+}
