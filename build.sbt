@@ -54,12 +54,12 @@ val ApiSettings: SettingsGroup = new SettingsGroup {
 }
 
 val TypeScriptSettings: SettingsGroup = new SettingsGroup {
-//  override val plugins = Set(
-//    SbtWeb
-//    , SbtTypescript)
+  //  override val plugins = Set(
+  //    SbtWeb
+  //    , SbtTypescript)
 
   override val settings = Seq(
-//    JsEngineKeys.engineType := EngineType.Node,
+    //    JsEngineKeys.engineType := EngineType.Node,
     sourceDirectory in Compile := baseDirectory.value / "src" / "main" / "typescript"
     , sourceDirectories in Compile := Seq((sourceDirectory in Compile).value)
 
@@ -109,10 +109,14 @@ lazy val typescriptNodeClient = inClients.as.module
   .dependsOn(petstoreApi)
   .settings(TypeScriptSettings)
 
+lazy val scalaHttp4sClient = inClients.as.module
+  .dependsOn(petstoreApi)
+
 lazy val allProjects: Seq[ProjectReference] = Seq(
   petstoreApi
   , scalaJvmServer
   , typescriptNodeClient
+  , scalaHttp4sClient
 )
 
 lazy val `izumi-petstore` = inRoot.as.root.transitiveAggregateSeq(allProjects)
