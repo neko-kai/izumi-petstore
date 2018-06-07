@@ -54,21 +54,25 @@ val ApiSettings: SettingsGroup = new SettingsGroup {
 }
 
 val TypeScriptSettings: SettingsGroup = new SettingsGroup {
-//  override val plugins = Set(
-//    SbtWeb
-//    , SbtTypescript)
+  //  override val plugins = Set(
+  //    SbtWeb
+  //    , SbtTypescript)
 
   override val settings = Seq(
-//    JsEngineKeys.engineType := EngineType.Node,
+    //    JsEngineKeys.engineType := EngineType.Node,
     sourceDirectory in Compile := baseDirectory.value / "src" / "main" / "typescript"
     , sourceDirectories in Compile := Seq((sourceDirectory in Compile).value)
 
     , compile in Compile := Def.task {
+      println((managedSources in Compile in petstoreApi).value)
       // i'm very sorry, but its the fault of ts's retarded `commonRoot` logic, not mine!
+
       val tsGeneratedSources = ((resourceManaged in petstoreApi).value / "main" / "typescript").asFile.getAbsoluteFile
       val tsSourceRoot = (sourceDirectory in Compile).value
       val tsSources = (tsSourceRoot / "generated").asFile.getAbsoluteFile
 
+      println(tsGeneratedSources)
+      println(tsSources)
       IO.copyDirectory(tsGeneratedSources, tsSources, overwrite = true)
 
       // sbt-typescript doesn't actually work at all
@@ -105,10 +109,14 @@ lazy val typescriptNodeClient = inClients.as.module
   .dependsOn(petstoreApi)
   .settings(TypeScriptSettings)
 
+lazy val scalaHttp4sClient = inClients.as.module
+  .dependsOn(petstoreApi)
+
 lazy val allProjects: Seq[ProjectReference] = Seq(
   petstoreApi
   , scalaJvmServer
   , typescriptNodeClient
+  , scalaHttp4sClient
 )
 
 lazy val `izumi-petstore` = inRoot.as.root.transitiveAggregateSeq(allProjects)
