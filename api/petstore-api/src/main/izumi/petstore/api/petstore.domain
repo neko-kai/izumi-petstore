@@ -4,3 +4,11 @@ data HelloWorld {
   hello: str
 }
 
+id PetId {
+  value: uuid
+}
+
+data PetMap {
+  map: map[PetId, HelloWorld]
+}
+

@@ -3,6 +3,7 @@ generated
 /local.sbt
 .secrets
 flow.txt
+idlc
 
 secrets.tar
 build/project
