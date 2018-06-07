@@ -1,11 +1,10 @@
 import com.github.pshirshov.izumi.idealingua.translator.IDLLanguage
 import com.github.pshirshov.izumi.idealingua.translator.TypespaceCompiler.CompilerOptions
-import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.Keys.{compilationTargets, idlDefaultExtensionsGolang, idlDefaultExtensionsScala, idlDefaultExtensionsTypescript}
-import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.{Invokation, Mode, Scope, compileSources}
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.Keys.{idlDefaultExtensionsScala, idlDefaultExtensionsTypescript}
+import com.github.pshirshov.izumi.sbt.IdealinguaPlugin.{Invokation, Mode}
 import com.github.pshirshov.izumi.sbt.deps.IzumiDeps.{R, V}
 import com.github.pshirshov.izumi.sbt.plugins.IzumiConvenienceTasksPlugin.Keys.defaultStubPackage
 import sbt.Keys.sourceDirectories
-import sbt.io.{Path, PathFinder}
 
 enablePlugins(IzumiGitEnvironmentPlugin)
 
@@ -24,8 +23,6 @@ val GlobalSettings: DefaultGlobalSettingsGroup = new DefaultGlobalSettingsGroup 
     )
     , addCompilerPlugin(R.kind_projector)
 
-    , scalacOptions += "-Ypartial-unification"
-
     , libraryDependencies ++= Seq(
       Izumi.R.idealingua_model
       , Izumi.R.idealingua_runtime_rpc
@@ -33,11 +30,6 @@ val GlobalSettings: DefaultGlobalSettingsGroup = new DefaultGlobalSettingsGroup 
       , Izumi.R.idealingua_runtime_rpc_cats
       , Izumi.R.idealingua_extension_rpc_format_circe
     )
-    , updateOptions ~= {
-      _.withCachedResolution(true)
-        .withLatestSnapshots(true)
-        .withInterProjectFirst(true)
-    }
   )
 }
 
@@ -47,36 +39,32 @@ val ApiSettings: SettingsGroup = new SettingsGroup {
   override val settings = Seq(
     IdealinguaPlugin.Keys.compilationTargets := Seq(
       Invokation(CompilerOptions(IDLLanguage.Scala, idlDefaultExtensionsScala.value), Mode.Sources)
-
       , Invokation(CompilerOptions(IDLLanguage.Typescript, idlDefaultExtensionsTypescript.value), Mode.Sources)
     )
   )
 }
 
 val TypeScriptSettings: SettingsGroup = new SettingsGroup {
-  //  override val plugins = Set(
-  //    SbtWeb
-  //    , SbtTypescript)
-
+  // manual hack because sbt-typescript doesn't work for some reason
   override val settings = Seq(
-    //    JsEngineKeys.engineType := EngineType.Node,
     sourceDirectory in Compile := baseDirectory.value / "src" / "main" / "typescript"
     , sourceDirectories in Compile := Seq((sourceDirectory in Compile).value)
 
     , compile in Compile := Def.task {
-      println((managedSources in Compile in petstoreApi).value)
-      // i'm very sorry, but its the fault of ts's retarded `commonRoot` logic, not mine!
+      val _ = (managedSources in Compile in petstoreApi).value
+      // i'm very sorry, but its the fault of typescript's retarded `common root` logic, not mine!
 
-      val tsGeneratedSources = ((resourceManaged in petstoreApi).value / "main" / "typescript").asFile.getAbsoluteFile
       val tsSourceRoot = (sourceDirectory in Compile).value
-      val tsSources = (tsSourceRoot / "generated").asFile.getAbsoluteFile
+      val tsGeneratedSources = ((resourceManaged in petstoreApi).value / "main" / "typescript").asFile.getAbsoluteFile
+
+      val tsTargetSourceRoot = (sourceManaged in Compile).value
 
       println(tsGeneratedSources)
-      println(tsSources)
-      IO.copyDirectory(tsGeneratedSources, tsSources, overwrite = true)
+      println(tsTargetSourceRoot)
+      IO.copyDirectory(tsGeneratedSources, tsTargetSourceRoot, overwrite = true)
+      IO.copyDirectory(tsSourceRoot, tsTargetSourceRoot, overwrite = true)
 
-      // sbt-typescript doesn't actually work at all
-      val res = sys.process.stringSeqToProcess(Seq("tsc", "-p", tsSourceRoot.getAbsolutePath)).!
+      val res = sys.process.stringSeqToProcess(Seq("tsc", "-p", tsTargetSourceRoot.getAbsolutePath)).!
       if (res != 0)
         throw new RuntimeException("fuck")
 
@@ -109,14 +97,14 @@ lazy val typescriptNodeClient = inClients.as.module
   .dependsOn(petstoreApi)
   .settings(TypeScriptSettings)
 
-lazy val scalaHttp4sClient = inClients.as.module
+lazy val scalaJvmClient = inClients.as.module
   .dependsOn(petstoreApi)
 
 lazy val allProjects: Seq[ProjectReference] = Seq(
   petstoreApi
   , scalaJvmServer
+  , scalaJvmClient
   , typescriptNodeClient
-  , scalaHttp4sClient
 )
 
 lazy val `izumi-petstore` = inRoot.as.root.transitiveAggregateSeq(allProjects)

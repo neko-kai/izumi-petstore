@@ -1,4 +1,4 @@
-import { HelloWorld } from './generated/petstore/api'
+import { HelloWorld } from './petstore/api'
 
 function main() {
     const hello = new HelloWorld({'hello': 'Hello'});

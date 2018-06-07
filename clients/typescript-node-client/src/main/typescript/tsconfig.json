@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../../target/tsOutput/",
+    "outDir": "../../../../target/tsOutput/",
     "module": "commonjs",
     "target": "es5",
     "lib": ["es6", "dom"],
