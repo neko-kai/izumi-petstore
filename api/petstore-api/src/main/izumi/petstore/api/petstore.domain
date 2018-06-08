@@ -8,7 +8,7 @@ service HelloService {
   def hello(): HelloWorld
 }
 
-enum Species = Cat | Python | Crustacean | MarkKelly
+enum Species = Pony | Python | Crustacean | MarkKelly
 
 data Pet {
   species: Species
