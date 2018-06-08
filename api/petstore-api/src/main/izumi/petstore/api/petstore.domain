@@ -4,14 +4,59 @@ data HelloWorld {
   hello: str
 }
 
+service HelloService {
+  def hello(): HelloWorld
+}
+
+enum Species = Cat | Python | Crustacean | MarkKelly
+
+data Pet {
+  species: Species
+  name: str
+}
+
 id PetId {
   value: uuid
 }
 
-data PetMap {
-  map: map[PetId, HelloWorld]
+enum Currency = USD | EUR | JPY
+
+data Cash {
+  currency: Currency
+  amount: i64
 }
 
-service HelloService {
-  def hello(): HelloWorld
+data PetBuyResult {
+  petIds: list[PetId]
+  moneyBack: Cash
+}
+
+service PetShop {
+  def buyPets(pets: list[Pet], cash: Cash): (PetBuyResult | PetBuyFailure)
+
+  def returnPets(pets: list[PetId]): (Ok | PetReturnFailure)
+}
+
+
+// failures
+
+adt PetBuyFailure = NotEnoughCash | PetsNotAvailable | OtherFailure
+
+data NotEnoughCash {
+  given: Cash
+  expected: Cash
+}
+data PetsNotAvailable {
+  pets: list[Pet]
+}
+data OtherFailure {
+  reason: str
+}
+
+data Ok {}
+
+adt PetReturnFailure = DontWantBack | OtherFailure
+
+data DontWantBack {
+  dontWantBack: list[Pet]
 }
