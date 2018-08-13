@@ -1,0 +1,50 @@
+
+
+    package user.api
+
+    enum Gender = Male | Female
+
+    id EntityID {
+      uuid: uuid
+    }
+
+    mixin Entity {
+      id: EntityID
+    }
+
+    mixin Person {
+      name: str
+      surname: str
+      gender: Gender
+    }
+
+    data User {
+      & Entity
+      + Person
+      password: str
+   }
+
+    data PublicUser {
+      + User
+      - password: str
+    }
+
+    adt SaveUserResult = Success | Failure
+
+    data Success {
+      message: str
+    }
+
+    data Failure {
+      code: int8
+    }
+
+
+    data Users {
+      users: list[PublicUser]
+    }
+
+    service UserService {
+      def saveUser(user: User): SaveUserResult
+      def findUserByName(name: str): (Users | Failure)
+    }

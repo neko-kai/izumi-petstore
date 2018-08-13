@@ -8,7 +8,27 @@ import org.http4s.client.blaze.Http1Client
 import petstore.api.HelloServiceWrapped
 import cats.implicits._
 import com.github.pshirshov.izumi.idealingua.runtime.cats.RuntimeCats._
-import fs2.StreamApp.ExitCode
+import com.github.pshirshov.izumi.idealingua.runtime.rpc.{IRTServiceResult, IRTWrappedServiceDefinition, IRTWrappedUnsafeServiceDefinition}
+import shapeless._
+import shapeless.ops.hlist._
+
+import scala.language.higherKinds
+
+case class Marshallers[L <: HList](hlist: L) {
+  import ScalaClient._
+
+  def client[F[_]: Effect: IRTServiceResult, S <: IRTWrappedServiceDefinition with IRTWrappedUnsafeServiceDefinition](implicit select: Selector[L, S]): F[S#ServiceClient[F]] =
+    for {
+      httpClient <- Http1Client[F]()
+
+      rt = new RuntimeHttp4s[F]
+
+      clientDispatcher = rt.httpClient(httpClient, marsh)(rt.requestBuilder(host))
+
+      client = (select(hlist): S).clientUnsafe(clientDispatcher)
+    } yield
+      client
+}
 
 object ScalaClient {
   final val rt = new RuntimeHttp4s[IO]
@@ -21,13 +41,8 @@ object ScalaClientApp {
 
   def main(args: Array[String]): Unit =
     (for {
-      httpClient <- Http1Client[IO]()
-
-      clientDispatcher = rt.httpClient(httpClient, marsh)(rt.requestBuilder(host))
-
-      helloworldClient = HelloServiceWrapped.clientUnsafe(clientDispatcher)
-
-      helloMsg <- helloworldClient.hello()
+      client <- Marshallers(HList(HelloServiceWrapped)).client[IO, HelloServiceWrapped.type]
+      helloMsg <- client.hello()
       _ <- IO(println(helloMsg))
     } yield ()).unsafeRunSync
 

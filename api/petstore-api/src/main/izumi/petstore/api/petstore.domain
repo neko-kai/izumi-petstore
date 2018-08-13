@@ -1,62 +1,63 @@
-package petstore.api
+    package petstore.api
 
-data HelloWorld {
-  hello: str
-}
+    data HelloWorld {
+      hello: str
+    }
 
-service HelloService {
-  def hello(): HelloWorld
-}
+    service HelloService {
+      def hello(): HelloWorld
+    }
 
-enum Species = Pony | Python | Crustacean | MarkKelly
+    enum Species = Pony | Python | Crustacean | MarkKelly
 
-data Pet {
-  species: Species
-  name: str
-}
+    data Pet {
+      species: Species
+      name: str
+    }
 
-id PetId {
-  value: uuid
-}
+    id PetId {
+      value: uuid
+    }
 
-enum Currency = USD | EUR | JPY
+    enum Currency = USD | EUR | JPY
 
-data Cash {
-  currency: Currency
-  amount: i64
-}
+    data Cash {
+      currency: Currency
+      amount: i64
+    }
 
-data PetBuyResult {
-  petIds: list[PetId]
-  moneyBack: Cash
-}
+    data PetBuyResult {
+      petIds: list[PetId]
+      moneyBack: Cash
+    }
 
-service PetShop {
-  def buyPets(pets: list[Pet], cash: Cash): (PetBuyResult | PetBuyFailure)
+    service PetShop {
+      def buyPets(pets: list[Pet], cash: Cash): (PetBuyResult | PetBuyFailure)
 
-  def returnPets(pets: list[PetId]): (Ok | PetReturnFailure)
-}
+      def returnPets(pets: list[PetId]): (Ok | PetReturnFailure)
+    }
 
 
-// failures
+    // failures
 
-adt PetBuyFailure = NotEnoughCash | PetsNotAvailable | OtherFailure
+    adt PetBuyFailure = NotEnoughCash | PetsNotAvailable | OtherFailure
 
-data NotEnoughCash {
-  given: Cash
-  expected: Cash
-}
-data PetsNotAvailable {
-  pets: list[Pet]
-}
-data OtherFailure {
-  reason: str
-}
+    data NotEnoughCash {
+      given: Cash
+      expected: Cash
+    }
+    data PetsNotAvailable {
+      pets: list[Pet]
+    }
+    data OtherFailure {
+      reason: str
+    }
 
-data Ok {}
+    data Ok {}
 
-adt PetReturnFailure = DontWantBack | OtherFailure
+    adt PetReturnFailure = DontWantBack | OtherFailure
 
-data DontWantBack {
-  dontWantBack: list[Pet]
-}
+    data DontWantBack {
+      dontWantBack: list[Pet]
+    }
+
