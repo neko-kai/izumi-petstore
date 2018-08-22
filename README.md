@@ -9,7 +9,7 @@ IdeaLingua
 ----------
 
 [IdeaLingua](https://github.com/pshirshov/izumi-r2) is an RPC framework that lets you effortlessly wire together distributed applications with components written in any language<br/>
-You can find out more at [our website](https://github.com/pshirshov/izumi-r2)
+You can find out more at [our website](https://izumi.7mind.io/)
 
 Language Support Matrix
 -----------------------
@@ -21,7 +21,7 @@ At the moment we support following languages:
 | **Scala / JVM**          | **Yes** [(example)](./servers/scala-jvm-server) | **Yes** |
 | **TypeScript / Node.js** | TBD     | **Yes** [(example)](./clients/typescript-node-client) |
 | **Go / Native**          | **Yes** | **Yes** |
-| **C# / .NET**             | **WIP** | TBD |
+| **C# / .NET**             | **Yes** | **Yes** |
 
 Some of them already have sample Pet Store implementations. Others are coming!
 
