@@ -1,14 +1,12 @@
-Petstore Sample for IdeaLingua
+IdeaLingua Example Project
 ==============================
 
-A sample Pet Store application with Scala back-end and TypeScript front-end, wired together via IdeaLingua API definitions
-
-You can use this sample as a starting template for your project
+This project has been replaced by [idealingua-example](https://github.com/7mind/idealingua-example)
 
 IdeaLingua
 ----------
 
-[IdeaLingua](https://github.com/pshirshov/izumi-r2) is an RPC framework that lets you effortlessly wire together distributed applications with components written in any language<br/>
+[IdeaLingua](https://github.com/7mind/izumi) is an RPC framework that lets you effortlessly wire together distributed applications with components written in any language<br/>
 You can find out more at [our website](https://izumi.7mind.io/)
 
 Language Support Matrix
@@ -25,4 +23,4 @@ At the moment we support following languages:
 
 Some of them already have sample Pet Store implementations. Others are coming!
 
-If you want your language to be supported, just submit a Pull Request to our [github repository](https://github.com/pshirshov/izumi-r2)
+If you want your language to be supported, just submit a Pull Request to our [github repository](https://github.com/7mind/izumi)
